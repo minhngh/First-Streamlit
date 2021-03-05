@@ -1,0 +1,4 @@
+{
+    "connection_string": "mongodb+srv://readonly:readonly@covid-19.hip2i.mongodb.net/covid19",
+    "database_name": "covid19"
+}
