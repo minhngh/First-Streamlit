@@ -33,10 +33,9 @@ def get_daily_data(all_documents):
     return [(doc['date'].date(), max(doc['confirmed_daily'], 0), max(doc['deaths_daily'], 0), max(doc['recovered_daily'], 0)) for doc in all_documents]
 def get_acc_data(all_documents, key):
     return [(doc[key].date(), doc['confirmed'], doc['deaths'], doc['recovered']) for doc in all_documents]
-def get_latest_date(db):
-    cur = db['global'].find({}, {"date": 1, "_id": 0}).sort("date", -1).limit(1)
-    return cur[0]['date']
-
+def get_k_latest_dates(db, k = 1):
+    dates = db['global'].find({}, {"date": 1, "_id": 0}).distinct('date')
+    return sorted(dates, reverse = True)[:k]
 def get_coordinates_data(all_documents):
     result = []
     for doc in all_documents:

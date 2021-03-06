@@ -83,8 +83,9 @@ def display_global_page(db):
     st.altair_chart(acc_linechart, use_container_width = True)
 
     message = st.text('Loading map...')
-    latest_date = get_latest_date(db)
-    all_documents = get_all_documents(db, {"date": latest_date}, collection = 'global')
+    top_latest_dates = get_k_latest_dates(db, 14)
+    date = st.slider('Chooose a date', top_latest_dates[-1], top_latest_dates[0], top_latest_dates[0])
+    all_documents = get_all_documents(db, {"date": date}, collection = 'global')
     coordinates_data = get_coordinates_data(all_documents)
 
     df = pd.DataFrame(coordinates_data, columns = ['confirmed_daily', 'coordinates'])
@@ -105,7 +106,7 @@ def display_global_page(db):
         get_line_color=[0, 0, 0],
     )
     message.text('')
-    st.subheader('Covid-19 in the world on' + f' {latest_date.strftime("%d/%m/%Y")}')
+    st.subheader('Covid-19 in the world on' + f' {date.strftime("%d/%m/%Y")}')
     st.pydeck_chart(pdk.Deck(
         map_style='mapbox://styles/mapbox/light-v9',
         initial_view_state=pdk.ViewState(
